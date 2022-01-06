@@ -53,7 +53,7 @@
       <form action='/' method='POST'>
         <div class="mb-3">
           <label for="alice_input" class="form-label">Input Message</label>
-          <input type="text" class="form-control" id="alice_input" >
+          <input type="text" class="form-control" name="alice_input" placeholder="Enter Message"id="alice_input" >
         
         
         <button type="submit" class="btn btn-primary mt-5">Submit</button>
@@ -63,11 +63,11 @@
     <div>
      
       <div>
-      Bob's deciphered message: {{cryp[1]}}   
+      Bob's deciphered message: {{cryp[0][0]}}   
       </div>
       <div>
         <!-- Eves message -->
-        Eve's deciphered message: {{cryp[2]}}
+        Eve's deciphered message: {{cryp[1][0]}}
       </div>
     </div>
     <!-- Optional JavaScript; choose one of the two! -->

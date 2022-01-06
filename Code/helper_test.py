@@ -32,5 +32,7 @@ adversary = decstr(eve_str,len(message),block_padding)
 print('Bob: ', decipher)
 print('Eve: ',adversary)
 
+print(len(bob_pred))
+
 
 
