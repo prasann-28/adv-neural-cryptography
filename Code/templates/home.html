@@ -62,13 +62,21 @@
 
     <div>
      
+      {% if cryp|length != 0 %}
       <div>
-      Bob's deciphered message: {{cryp[0][0]}}   
-      </div>
-      <div>
-        <!-- Eves message -->
-        Eve's deciphered message: {{cryp[1][0]}}
-      </div>
+        
+        Bob's deciphered message: {{cryp[0]}}   
+        </div>
+        <div>
+          <!-- Eves message -->
+          Eve's deciphered message: {{cryp[1]}}
+        </div>
+        
+        
+      {% else %}
+        <h2>Enter a message above</h2>
+      {% endif %}
+      
     </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
