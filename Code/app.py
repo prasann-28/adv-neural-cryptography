@@ -38,7 +38,7 @@ def hello():
     cryp = []
     if request.method == 'POST':
         raw_message = request.form['alice_input']
-        print(raw_message)
+        # print(raw_message)
         messages = processRawMessage(raw_message)
         message = messages[0]
         key = messages[1]

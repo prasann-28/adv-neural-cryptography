@@ -9,6 +9,7 @@ block_padding= 11
 block_size = 16
 
 encrypt = encstr(message,block_padding)
+print(encrypt)
 bin_ciph = strToArr(encrypt[0], block_size)
 
 alice = load_model('alice.h5')

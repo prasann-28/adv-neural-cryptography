@@ -28,23 +28,30 @@ def randombits(n):
     return format(decvalue, formatstring)
 
 def encstr(message, block_padding=0):
-    cipher = ""
-    for c in message:
-        binstr = binlist[chrlist.index(c)]
-        binstrpadded = randombits(block_padding) + str(binstr)
-        cipher = cipher + binstrpadded
+    cipher = ''
+    bintext = ' '.join('{0:016b}'.format(ord(x), 'b') for x in message)
+    cipher  = bintext.replace(" ", "")
+
     return [cipher, len(message)]
 
 def decstr(cipher, n, block_padding=0):
-    message = ""
-    cipherlength = len(cipher)
-    block_size = cipherlength // n
-    for i in range(n):
-        blockpadded = cipher[block_size*i : block_size*i + block_size]
-        blockunpadded = blockpadded[block_padding:]
-        character = chrlist[binlist.index(blockunpadded)]
-        message = message + character
-    return message
+    seperated = ''
+    for i in range(len(cipher)):
+        if i%16 == 0:
+            seperated += " "
+        seperated += cipher[i]
+
+    # print(seperated)
+    bin_list = seperated.split()
+    text = ''
+
+    for bin in bin_list:
+        an_integer = int(bin, 2)
+        ascii_character = chr(an_integer)
+        text += ascii_character
+
+    return text
+
 
 def strToArr(bin_string,block_size):
     bin_list = []
