@@ -50,11 +50,14 @@
     </nav>
 
     <div class="container mb-3">
-      <form action='/' method='POST'>
+      <form action='/' method='POST' enctype="multipart/form-data">
         <div class="mb-3">
           <label for="alice_input" class="form-label">Input Message</label>
-          <input type="text" class="form-control" name="alice_input" placeholder="Enter Message"id="alice_input" >
-        
+          <input type="text" class="form-control" name="alice_input" placeholder="Enter Message" id="alice_input" >
+          <div class="input-group my-5">
+            <input type="file" class="form-control" name="file" id="file">
+            
+          </div>
         
         <button type="submit" class="btn btn-primary mt-5">Submit</button>
       </form>
@@ -71,6 +74,9 @@
           <!-- Eves message -->
           Eve's deciphered message: {{cryp[1]}}
         </div>
+        <!-- <div>
+          Image: <img src="{{cryp[2]}}" alt="">
+        </div> -->
         
         
       {% else %}
@@ -78,6 +84,8 @@
       {% endif %}
       
     </div>
+
+    
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
