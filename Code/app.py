@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 from keras.models import load_model
 import numpy as np
 from helper import *
+import base64
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = './received/'
@@ -33,6 +34,16 @@ def processBinaryMessage(binary_message):
     decipher = decstr(message_str,len(binary_message),block_padding) 
     return decipher
 
+def processRawFile(file):
+    converted_string = base64.b64encode(file.read())
+    return converted_string
+
+def processBinaryFile(img_text):
+    image_file = base64.b64decode(img_text)
+    return image_file
+
+
+
 @app.route('/', methods=['GET', 'POST'])
 def hello():
     cryp = []
@@ -50,21 +61,37 @@ def hello():
         plaintext = processBinaryMessage(decipher)
         adv = processBinaryMessage(adversary)
 
-        # if 'file' not in request.files:
-        #     flash('No file part')
-        #     return redirect(request.url)
-        # file = request.files['file']
-        # # if user does not select file, browser also
-        # # submit a empty part without filename
-        # if file.filename == '':
-        #     flash('No selected file')
-        #     return redirect(request.url)
-        # else:
-        #     filename = secure_filename(file.filename)
-        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        else:
+            filename = secure_filename(file.filename)
+            img_str = processRawFile(file)
+            # print(img_str)
+            img_messages = processRawMessage(str(img_str))
+            img = img_messages[0]
+            img_key = img_messages[1]
 
-        #     url = url_for('hello', filename='received/' + filename)
+            cipher = alice.predict([img,img_key])
+            decipher = (bob.predict([cipher, img_key]) > 0.5).astype(int)
+            adversary = (eve.predict(cipher) > 0.5).astype(int)
+
+            img_plaintext = processBinaryMessage(decipher)
+            img_adv = processBinaryMessage(adversary)       
+
+            print(img_plaintext == img_str)     
+
+            # plaintext_img = processBinaryFile(img_plaintext)
+            # adversary_img = processBinaryFile(img_adv)
         
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
         cryp = [plaintext,adv]
 
     return render_template('home.html', cryp = cryp)
