@@ -1,9 +1,9 @@
 import numpy as np
 
+# TO BE KEPT CONSTANT THROUGHOUT THE PROJECT
 block_size_unpadded = 5
 block_padding = 11
-block_size = block_size_unpadded + block_padding
-
+block_size = 16
 chrlist = [
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
@@ -20,6 +20,7 @@ binlist = [
     '11110', '11111'
 ]
 
+# To generate random bits for padding 
 def randombits(n):
     if n == 0:
         return ''
@@ -27,6 +28,7 @@ def randombits(n):
     formatstring = '0' + str(n) + 'b'
     return format(decvalue, formatstring)
 
+# To convert a character string into binary string
 def encstr(message, block_padding=0):
     cipher = ''
     bintext = ' '.join('{0:016b}'.format(ord(x), 'b') for x in message)
@@ -34,6 +36,7 @@ def encstr(message, block_padding=0):
 
     return [cipher, len(message)]
 
+# To convert binary cipher text into deiphered text
 def decstr(cipher, n, block_padding=0):
     seperated = ''
     for i in range(len(cipher)):
@@ -52,7 +55,7 @@ def decstr(cipher, n, block_padding=0):
 
     return text
 
-
+# Convert a string of binary characters into a corresponding numpy array 
 def strToArr(bin_string,block_size):
     bin_list = []
     keys = []
@@ -72,6 +75,7 @@ def strToArr(bin_string,block_size):
     key_list = np.array(keys)
     return [input_list, key_list]
 
+# To convert a binary numpy array to a string of binary characters
 def arrToStr(bin_arr):
     bin_string = ''
     
@@ -79,3 +83,28 @@ def arrToStr(bin_arr):
         for bit in inner:
             bin_string += str(bit)
     return bin_string
+
+# Combines above functions into one to encrypt a text message
+def processRawMessage(raw_message):
+    encrypt = encstr(raw_message,block_padding)
+    bin_cipher = strToArr(encrypt[0], block_size)
+    bin_message = bin_cipher[0]
+    bin_key = bin_cipher[1]
+
+    return [bin_message,bin_key]
+
+# Combines above functions into one to decrypt a text message
+def processBinaryMessage(binary_message):
+    message_str = arrToStr(binary_message)
+    decipher = decstr(message_str,len(binary_message),block_padding) 
+    return decipher
+
+# Combines above functions into one to encrypt a file
+def processRawFile(file):
+    converted_string = base64.b64encode(file.read())
+    return converted_string
+
+# Combines above functions into one to decrypt a file 
+def processBinaryFile(img_text):
+    image_file = base64.b64decode(img_text)
+    return image_file

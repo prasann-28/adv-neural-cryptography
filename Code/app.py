@@ -1,11 +1,14 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 from flask import Flask, render_template, request, redirect, flash
 from keras.models import load_model
 import numpy as np
-from helper import *
 import base64
 from werkzeug.utils import secure_filename
+
+# Importing local helper.py for helper functions
+from helper import *
 
 UPLOAD_FOLDER = './received/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -20,28 +23,6 @@ bob = load_model('bob.h5')
 eve = load_model('eve.h5')
 block_padding= 11
 block_size = 16
-
-def processRawMessage(raw_message):
-    encrypt = encstr(raw_message,block_padding)
-    bin_cipher = strToArr(encrypt[0], block_size)
-    bin_message = bin_cipher[0]
-    bin_key = bin_cipher[1]
-
-    return [bin_message,bin_key]
-
-def processBinaryMessage(binary_message):
-    message_str = arrToStr(binary_message)
-    decipher = decstr(message_str,len(binary_message),block_padding) 
-    return decipher
-
-def processRawFile(file):
-    converted_string = base64.b64encode(file.read())
-    return converted_string
-
-def processBinaryFile(img_text):
-    image_file = base64.b64decode(img_text)
-    return image_file
-
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -61,10 +42,10 @@ def hello():
         plaintext = processBinaryMessage(decipher)
         adv = processBinaryMessage(adversary)
 
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
+        # if 'file' not in request.files:
+        #     flash('No file part')
+        #     return redirect(request.url)
+        # file = request.files['file']
         # if user does not select file, browser also
         # submit a empty part without filename
         # if file.filename == '':
