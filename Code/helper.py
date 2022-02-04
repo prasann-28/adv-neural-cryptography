@@ -1,4 +1,5 @@
 import numpy as np
+import base64
 
 # TO BE KEPT CONSTANT THROUGHOUT THE PROJECT
 block_size_unpadded = 5
@@ -99,12 +100,21 @@ def processBinaryMessage(binary_message):
     decipher = decstr(message_str,len(binary_message),block_padding) 
     return decipher
 
-# Combines above functions into one to encrypt a file
-def processRawFile(file):
-    converted_string = base64.b64encode(file.read())
+# Converts an image list to a string capable of encryption
+
+def processImageList(image):
+    converted_string = base64.b64encode(image)
     return converted_string
 
-# Combines above functions into one to decrypt a file 
-def processBinaryFile(img_text):
-    image_file = base64.b64decode(img_text)
-    return image_file
+# Error counter
+
+def testEquality(original,deciphered):
+    count = 0
+    if len(original) != len(deciphered):
+        return -1
+    else:
+        for i in range(len(original)):
+            if original[i] != deciphered[i]:
+                count +=1
+    return count
+
