@@ -50,7 +50,7 @@ def hello():
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            flash('No selected file')
+            # flash('No selected file')
             return redirect(request.url)
         else:
             file.save('./uploads/' + file.filename)
