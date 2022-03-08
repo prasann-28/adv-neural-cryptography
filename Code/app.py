@@ -43,35 +43,35 @@ def hello():
         plaintext = processBinaryMessage(decipher)
         adv = processBinaryMessage(adversary)
 
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            # flash('No selected file')
-            return redirect(request.url)
-        else:
-            file.save('./uploads/' + file.filename)
-            img = load_img('./uploads/' + file.filename)
-            # image_list = img_to_array(img)
-            image_str = processImageList(img.tobytes())
-            processed_img = processRawMessage(str(image_str))
-            img_bin = processed_img[0]
-            img_key = processed_img[1]
+        # if 'file' not in request.files:
+        #     flash('No file part')
+        #     return redirect(request.url)
+        # file = request.files['file']
+        # # if user does not select file, browser also
+        # # submit a empty part without filename
+        # if file.filename == '':
+        #     # flash('No selected file')
+        #     return redirect(request.url)
+        # else:
+        #     file.save('./uploads/' + file.filename)
+        #     img = load_img('./uploads/' + file.filename)
+        #     # image_list = img_to_array(img)
+        #     image_str = processImageList(img.tobytes())
+        #     processed_img = processRawMessage(str(image_str))
+        #     img_bin = processed_img[0]
+        #     img_key = processed_img[1]
 
-            cipher_img = alice.predict([img_bin,img_key])
-            decipher_img = (bob.predict([cipher_img, img_key]) > 0.5).astype(int)
-            # print(img_bin==decipher_img)
-            plaintext_img = processBinaryMessage(decipher_img)
-            abnormalities = testEquality(str(image_str),plaintext_img)
-            print(abnormalities)
-            for i in range(len(plaintext_img)):
-                if str(image_str)[i] != plaintext_img[i]:
-                    print('Original: ', str(image_str)[i]  )
-                    print('Decrypted: ', plaintext_img[i]  )
-                    print('Location: ', i)
+        #     cipher_img = alice.predict([img_bin,img_key])
+        #     decipher_img = (bob.predict([cipher_img, img_key]) > 0.5).astype(int)
+        #     # print(img_bin==decipher_img)
+        #     plaintext_img = processBinaryMessage(decipher_img)
+        #     abnormalities = testEquality(str(image_str),plaintext_img)
+        #     print(abnormalities)
+        #     for i in range(len(plaintext_img)):
+        #         if str(image_str)[i] != plaintext_img[i]:
+        #             print('Original: ', str(image_str)[i]  )
+        #             print('Decrypted: ', plaintext_img[i]  )
+        #             print('Location: ', i)
             
         cryp = [plaintext,adv]
 
