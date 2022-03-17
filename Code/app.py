@@ -1,6 +1,7 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+# TODO: Add Image Encryption using Chaos Maps (use git for reference)
 from flask import Flask, render_template, request, redirect, flash
 from keras.models import load_model
 from keras.preprocessing.image import img_to_array, load_img
