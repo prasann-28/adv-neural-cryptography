@@ -1,8 +1,10 @@
 # Imports helper.py for testing purposes
+from email.mime import image
 from helper import *
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from keras.models import load_model
+from matplotlib.pyplot import imshow
 
 message = 'hello world'
 
@@ -40,5 +42,11 @@ print('Eve: ',adversary)
 
 print(len(bob_pred))
 
+image = 'test1'
+ext = '.png'
+im_mat = getImageMatrix(imageName=image+ext)
+print(im_mat)
+LogisticEncryption(image+ext, "keykeykeykeykey")
+LogisticDecryption(image + "_LogisticEnc.png", "keykeykeykeykey")
 
 
