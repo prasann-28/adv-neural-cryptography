@@ -49,6 +49,6 @@ ext = '.png'
 # im_mat = getImageMatrix(imageName=image+ext)
 # print(im_mat)
 image_enc,key,superkey = encryptImage(image+ext)
-decryptImage(image + "_LogisticEnc.png", key, superkey )
+dec_img, adv_img = decryptImage(image + "_LogisticEnc.png", key, superkey )
 
 
