@@ -340,6 +340,4 @@ def decryptImage(imageName,cipher,superkey):
     dec_image = LogisticDecryption(imageName,key, "bob")
     adv_image = LogisticDecryption(imageName,adv, "eve")
 
-    return dec_image,adv_image
-
-            
+    return dec_image[8:],adv_image[8:]      

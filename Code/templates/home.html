@@ -74,12 +74,14 @@
           <!-- Eves message -->
           Eve's deciphered message: {{cryp[1]}}
         </div>
-        <!-- <div>
-          Bob's Image: <img style="height: 100px; width: 100px;" src="../test_LogisticDec_bob.png" alt="">
+          Bob's Image: <img src="{{ url_for('static', filename = cryp[2]) }}" alt="cryp[2]">
         </div>
         <div>
-          Eve's Image: <img src={{cryp[3]}} alt="">
-        </div> -->
+          Eve's Image: <img src="{{ url_for('static', filename = cryp[3]) }}" alt="">
+        </div>
+        <div>
+          Original Image; <img src="{{ url_for('static', filename = cryp[4]) }}" />
+        </div>
         
       {% else %}
         <h2>Enter a message above</h2>

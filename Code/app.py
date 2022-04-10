@@ -54,11 +54,11 @@ def hello():
             # flash('No selected file')
             return redirect(request.url)
         else:
-            file.save('./uploads/' + file.filename)
-            enc_path, key, superkey = encryptImage('./uploads/' + file.filename)
+            file.save('./static/uploads/' + file.filename)
+            enc_path, key, superkey = encryptImage('./static/uploads/' + file.filename)
             dec_img, adv_img = decryptImage(enc_path, key, superkey )
             
-        cryp = [plaintext,adv,dec_img,adv_img]
+        cryp = [plaintext,adv,dec_img,adv_img,'/uploads/' + file.filename]
 
     return render_template('home.html', cryp = cryp)
 
