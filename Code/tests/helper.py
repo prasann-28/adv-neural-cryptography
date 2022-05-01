@@ -17,7 +17,7 @@ chrlist = [
     ':', ' '
 ]
 alice = load_model('alice.h5')
-bob  = load_model('bob.h5')
+bob = load_model('bob.h5')
 eve = load_model('eve.h5')
 binlist = [
     '00000', '00001', '00010', '00011', '00100', 
@@ -231,8 +231,8 @@ def LogisticEncryption(imageName, key):
     for x in range(dimensionX):
         for y in range(dimensionY):
             pix[x, y] = LogisticEncryptionIm[x][y]
-    im.save(imageName.split('.')[0] + "_LogisticEnc.png", "PNG")
-    return imageName.split('.')[0] + "_LogisticEnc.png"
+    im.save(imageName[:-4] + "_LogisticEnc.png", "PNG")
+    return imageName[:-4] + "_LogisticEnc.png"
 
 def LogisticDecryption(imageName, key, decrypterName):
     N = 256
@@ -340,6 +340,4 @@ def decryptImage(imageName,cipher,superkey):
     dec_image = LogisticDecryption(imageName,key, "bob")
     adv_image = LogisticDecryption(imageName,adv, "eve")
 
-    return [dec_image,adv_image]
-
-            
+    return dec_image[8:],adv_image[8:]      

@@ -1,54 +1,70 @@
-# Imports helper.py for testing purposes
-from email.mime import image
-from helper import *
+# Input format
+
+# !pip3 install joblib
+
+# load_model works with Python 3.6.13 :: Anaconda, Inc.
+from email import message
+from pydoc import plain
+from tarfile import BLOCKSIZE
+import unittest
 import os
-
-from helper import decryptImage
+from unittest import result
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+# import joblib
 from keras.models import load_model
-from matplotlib.pyplot import imshow
+import numpy as np
+from helper import *
 
-message = 'hello world'
+alice1 = load_model('alice.h5')
+bob1 = load_model('bob.h5')
+eve1 = load_model('eve.h5')
 
-# Block padding and size to be kept constant
-block_padding= 11
-block_size = 16
+BLOCKSIZE = 16
+class UnitTestHelper(unittest.TestCase):
 
-# Encryption of message and key generation and binary conversion
-encrypt = encstr(message,block_padding)
-print(encrypt)
-bin_ciph = strToArr(encrypt[0], block_size)
+    def test_encstr(self):
+        raw_message = 'Hello World!'
+        bintext = ' '.join('{0:016b}'.format(ord(x), 'b') for x in raw_message)
+        cipher  = bintext.replace(" ", "")
+        output = encstr(raw_message)
+        correct_bin = '000000000100100000000000011001010000000001101100000000000110110000000000011011110000000000100000000000000101011100000000011011110000000001110010000000000110110000000000011001000000000000100001'
+        self.assertEqual(output[0],correct_bin)
+        self.assertEqual(output[1],len(raw_message))
 
-alice = load_model('alice.h5')
+    def test_decstr(self):
+        raw_message = 'Hello World!'
+        bintext = ' '.join('{0:016b}'.format(ord(x), 'b') for x in raw_message)
+        cipher  = bintext.replace(" ", "")
+        plaintext = decstr(cipher,BLOCKSIZE)
+        self.assertEqual(raw_message,plaintext)
+    
+    def test_strToArr(self):
+        raw_message = 'Hello World!'
+        bintext = ' '.join('{0:016b}'.format(ord(x), 'b') for x in raw_message)
+        cipher  = bintext.replace(" ", "")
+        result = strToArr(cipher,BLOCKSIZE)
 
-bin_message = bin_ciph[0]
-bin_key = bin_ciph[1]
+        self.assertEqual(result,result)
 
-# Alice's prediction
-cipher = alice.predict([bin_message, bin_key])
+    def test_arrToStr(self):
+        raw_list = [[1,0,1,0]]
+        bintext = arrToStr(raw_list)
+        self.assertEqual(bintext,'1010')
 
-bob  = load_model('bob.h5')
-eve = load_model('eve.h5')
+    # def test_adversarial_performance(self):
+    #     raw_message = 'Hello World!'
+    #     messages = processRawMessage(raw_message)
+    #     message = messages[0]
+    #     key = messages[1]
+    #     cipher = alice.predict([message,key])
+    #     decipher = (bob.predict([cipher, key]) > 0.5).astype(int)
+    #     plaintext = processBinaryMessage(decipher)
+    #     adversary = (eve.predict(cipher) > 0.5).astype(int)
+    #     adv = processBinaryMessage(adversary)
 
-# Bob and Eve decryption test
-bob_pred = (bob.predict([cipher, bin_key]) > 0.5).astype(int)
-eve_pred = (eve.predict(cipher) > 0.5).astype(int)
+    #     self.assertEqual(raw_message, plaintext)
+    #     self.assertNotEqual(raw_message, adv)
 
-bob_str = arrToStr(bob_pred)
-eve_str = arrToStr(eve_pred)
-decipher = decstr(bob_str,len(message),block_padding)
-adversary = decstr(eve_str,len(message),block_padding)
-
-print('Bob: ', decipher)
-print('Eve: ',adversary)
-
-print(len(bob_pred))
-
-image = 'test1'
-ext = '.png'
-# im_mat = getImageMatrix(imageName=image+ext)
-# print(im_mat)
-image_enc,key,superkey = encryptImage(image+ext)
-dec_img, adv_img = decryptImage(image + "_LogisticEnc.png", key, superkey )
-
-
+if __name__ == '__main__':
+    unittest.main()
