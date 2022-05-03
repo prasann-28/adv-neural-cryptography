@@ -79,13 +79,20 @@
         <div class="container">
           <div class="row">
             <div class="col">
-              Bob's Image: <img src="{{ url_for('static', filename = cryp[2]) }}" alt="cryp[2]">
+              Bob's Image: <img style="max-height: 300px;
+              
+              object-fit: contain;
+              width: 100%;" src="{{ url_for('static', filename = cryp[2]) }}" alt="cryp[2]">
             </div>
             <div class="col">
-              Eve's Image: <img src="{{ url_for('static', filename = cryp[3]) }}" alt="">
+              Eve's Image: <img style="max-height: 300px;
+              object-fit: contain;
+              width: 100%;" src="{{ url_for('static', filename = cryp[3]) }}" alt="">
             </div>
             <div class="col">
-              Original Image; <img src="{{ url_for('static', filename = cryp[4]) }}" />
+              Original Image: <img style="max-height: 300px;
+              object-fit: contain;
+              width: 100%;" src="{{ url_for('static', filename = cryp[4]) }}" />
             </div>
           </div>
         </div>
